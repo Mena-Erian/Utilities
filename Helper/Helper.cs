@@ -257,16 +257,28 @@ namespace HelperUtilities
             else return false;
         }
 
-        public static void Print<T>(this T value) => Console.WriteLine(value);
+        public static void Print<T>(this T value, bool withNewLine = true)
+        {
+            if (withNewLine) Console.WriteLine(value);
+            else Console.Write(value);
+        }
         public static void Print<T>(this T value, string addToTheEnd) => Console.WriteLine(value + addToTheEnd);
         public static void Print<T>(this IEnumerable<T> values) where T : IEnumerable
         {
             foreach (T item in values) Console.WriteLine(item);
         }
-        public static void PrintAll<T>(this ICollection<T> values, string? addToTheEnd = null)
+        public static void PrintAll<T>(this ICollection<T> values, string? addToTheEnd = null, bool withNewLine = true)
         {
-            foreach (T item in values) Console.WriteLine(item);
-            if (addToTheEnd is not null) Console.WriteLine(addToTheEnd);
+            if (withNewLine)
+            {
+                foreach (T item in values) Console.WriteLine(item);
+                if (addToTheEnd is not null) Console.WriteLine(addToTheEnd);
+            }
+            else
+            {
+                foreach (T item in values) Console.Write($"{item} ");
+                if (addToTheEnd is not null) Console.Write(addToTheEnd);
+            }
         }
         public static void PrintAll<T>(this ICollection values)
         {
@@ -316,13 +328,13 @@ namespace HelperUtilities
             if (withRowState)
                 foreach (DataRow item in dt.Rows)
                 {
-                    item.ItemArray.PrintAll();
-                    item.RowState.Print();
+                    item.ItemArray.PrintAll(withNewLine: false);
+                    item.RowState.Print(false);
                     "-------------------------------*".Print();
                 }
             foreach (DataRow item in dt.Rows)
             {
-                item.ItemArray.PrintAll();
+                item.ItemArray.PrintAll(addToTheEnd: "\n", withNewLine: false);
                 "-------------------------------*".Print();
             }
         }
