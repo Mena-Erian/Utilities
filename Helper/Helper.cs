@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -300,7 +301,6 @@ namespace HelperUtilities
                 Console.WriteLine("------------------------------------\n");
             }
         }
-
         public static void PrintAll<TKay, TElement>(this IEnumerable<IGrouping<TKay, TElement>> values)
         {
             foreach (IGrouping<TKay, TElement> item in values)
@@ -309,6 +309,21 @@ namespace HelperUtilities
                 Console.Write("Key: "); item.Key.Print();
                 Console.WriteLine("Elements: "); item.PrintAll();
                 Console.WriteLine("------------------------------------\n");
+            }
+        }
+        public static void PrintAll(this DataTable dt, bool withRowState = false)
+        {
+            if (withRowState)
+                foreach (DataRow item in dt.Rows)
+                {
+                    item.ItemArray.PrintAll();
+                    item.RowState.Print();
+                    "-------------------------------*".Print();
+                }
+            foreach (DataRow item in dt.Rows)
+            {
+                item.ItemArray.PrintAll();
+                "-------------------------------*".Print();
             }
         }
     }
